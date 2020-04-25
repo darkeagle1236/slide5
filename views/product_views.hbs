@@ -1,0 +1,172 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Products</title>
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">TGDĐ.com</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/user">User</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/customer">Customer</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/product">Product<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/order">Order</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <h2>Product List</h2>
+    <button class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Add New</button>
+    <table class="table table-striped" id="mytable">
+        <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Product Name</th>
+            <th>Product Type</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each results}}
+            <tr>
+                <td>{{ _id }}</td>
+                <td>{{ productName }}</td>
+                <td>{{ productType }}</td>
+                <td>{{ price }}</td>
+                <td>
+                    <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id="{{ _id }}" data-product_name="{{ productName }}" data-product_price="{{ price }}" data-product_type="{{productType}}" id="editBtn">Edit</a>
+                    <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id="{{ _id }}">Delete</a>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Add Product-->
+<form action="/addProduct" method="post" class="form">
+    <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="text" name="product_name" class="form-control" placeholder="Product Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="product_type" class="form-control" placeholder="Product Type" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="price" class="form-control" placeholder="Price" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal Update Product-->
+<form action="/updateProduct" method="post" class="form">
+    <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="text" name="product_name" class="form-control product_name" placeholder="Product Name" id="inputName" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="product_type" class="form-control product_type" placeholder="Product Type" id="inputType" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="product_price" class="form-control price" placeholder="Price" id="inputPrice" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="product_id" class="product_id">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal Delete Product-->
+<form id="add-row-form" action="/deleteProduct" method="post" class="form">
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Delete Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <strong>Are you sure to delete this data?</strong>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="product_id" class="product_id2" required>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="/assets/js/jquery-3.5.0.min.js"></script>
+<script src="/assets/js/bootstrap.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#mytable').on('click','.edit',function(){
+        let product_id = $(this).data('id');
+        let product_name = $(this).data('product_name');
+        let product_price = $(this).data('product_price');
+        let product_type = $(this).data('product_type');
+        $('#EditModal').modal('show');
+        $('.product_name').val(product_name);
+        $('.price')[0].value = product_price;
+        $('.product_id').val(product_id);
+        $('.product_type').val(product_type);
+    });
+    //showing delete record modal
+    $('#mytable').on('click','.delete',function(){
+        let product_id = $(this).data('id');
+        $('#DeleteModal').modal('show');
+        $('.product_id2').val(product_id);
+    });
+
+    });
+</script>
+</body>
+</html>
