@@ -150,6 +150,9 @@ app.post('/deleteCustomer', async (req, res) => {
         if (stt != null) {
             res.redirect('/customer')
         }
+        else{
+            console.log(stt)
+        }
     } catch (e) {
         res.send(e)
     }
