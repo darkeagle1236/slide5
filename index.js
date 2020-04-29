@@ -35,6 +35,39 @@ app.get('/user', async (req, res) => {
     let user = await User.find({})
     res.render('user_views', {layout: false, results: user})
 })
+app.post('/register', async (req, res) => {
+    const user = new User({
+        password: req.body.password,
+        username: req.body.username,
+        role: "1"
+    })
+    let isRegistered = await User.find({username: req.body.username})
+    if(isRegistered.length!=0){
+        res.status(403).send('Username already existed')
+    }
+    else {
+        try {
+            let stt = await user.save()
+            if (stt != null) {
+                res.status(200).send(stt)
+            }
+        } catch (e) {
+            res.status(403).send('Có lỗi xảy ra' + e)
+        }
+    }
+
+})
+app.post('/login', async (req, res) => {
+
+    let user = await User.find({username: req.body.username,password: req.body.password})
+
+        if (user.length!=0) {
+            res.status(200).send(user)
+        }
+        else{
+            res.status(404).send('Username not found')
+        }
+})
 app.post('/addUser', async (req, res) => {
     const user = new User({
         password: req.body.password,
@@ -76,7 +109,10 @@ app.post('/deleteUser', async (req, res) => {
     }
 })
 //Product APIs
-
+app.get('/getAllProduct', async (req, res) => {
+    let product = await Product.find({})
+    res.status(200).json(product)
+})
 app.get('/product', async (req, res) => {
     let product = await Product.find({})
     res.render('product_views', {layout: false, results: product})
