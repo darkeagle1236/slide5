@@ -20,6 +20,9 @@ let Product = mongoose.model('Product', productSchema, 'Product')
 //Customer Schema
 let customerSchema = require('./schema/customerSchema')
 let Customer = mongoose.model('Customer', customerSchema, 'Customer')
+//Cart Schema
+let cartSchema = require('./schema/cartSchema')
+let Cart = mongoose.model('Cart', cartSchema, 'Cart')
 //Express init
 app.set('views', path.join(__dirname, "views"))
 app.set('view engine', 'hbs')
@@ -47,6 +50,12 @@ app.post('/register', async (req, res) => {
     }
     else {
         try {
+            let newCart = new Cart({
+                username:req.body.username,
+                productList:[]
+            })
+            let sttCart = await newCart.save()
+            console.log(sttCart)
             let stt = await user.save()
             if (stt != null) {
                 res.status(200).send(stt)
@@ -210,4 +219,12 @@ app.post('/updateCustomer', async (req, res) => {
 
 
 })
+//Cart APIs
+app.get('/getCartById', async (req, res) => {
+   let stt = await Cart.findOne({userId: req.body.id})
+    res.status(200).send(stt)
+});
+app.post('/addItemToCart', async (req, res) => {
+
+});
 app.listen(process.env.PORT||9000)
