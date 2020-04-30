@@ -220,9 +220,9 @@ app.get('/getCartById', async (req, res) => {
 });
 app.post('/addItemToCart', async (req, res) => {
     let stt = await Cart.findOne({username: req.body.username,productName:req.body.productName})
-    if(stt!=null){
+    if(stt!=null||stt!=""){
         let updateCart = await Cart.findOneAndUpdate({username: req.body.username,productName:req.body.productName},{
-            quantity:stt.quantity++
+            quantity:stt.quantity+1
         })
         res.status(400).send(updateCart)
     }
