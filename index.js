@@ -214,8 +214,8 @@ app.post('/updateCustomer', async (req, res) => {
 
 })
 //Cart APIs
-app.get('/getCartById', async (req, res) => {
-   let stt = await Cart.find({username: req.body.username})
+app.post('/getCartById', async (req, res) => {
+    let stt = await Cart.find({username: req.body.username})
     res.status(200).send(stt)
 });
 app.post('/addItemToCart', async (req, res) => {
