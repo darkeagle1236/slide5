@@ -50,12 +50,6 @@ app.post('/register', async (req, res) => {
     }
     else {
         try {
-            let newCart = new Cart({
-                username:req.body.username,
-                productList:[]
-            })
-            let sttCart = await newCart.save()
-            console.log(sttCart)
             let stt = await user.save()
             if (stt != null) {
                 res.status(200).send(stt)
@@ -221,10 +215,27 @@ app.post('/updateCustomer', async (req, res) => {
 })
 //Cart APIs
 app.get('/getCartById', async (req, res) => {
-   let stt = await Cart.findOne({userId: req.body.id})
+   let stt = await Cart.find({username: req.body.username})
     res.status(200).send(stt)
 });
 app.post('/addItemToCart', async (req, res) => {
-
+    let stt = await Cart.findOne({username: req.body.username,productName:req.body.productName})
+    if(stt!=null){
+        let updateCart = await Cart.findOneAndUpdate({username: req.body.username,productName:req.body.productName},{
+            quantity:stt.quantity++
+        })
+        res.status(400).send(updateCart)
+    }
+    else{
+        let cart = new Cart({
+            username:req.body.username,
+            productName:req.body.productName,
+            productType: req.body.productType,
+            price: req.body.price,
+            quantity: 1
+        })
+        let stt = await cart.save()
+        res.status(200).send(stt)
+    }
 });
 app.listen(process.env.PORT||9000)
